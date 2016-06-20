@@ -16,7 +16,7 @@ type query struct  {
 	args []interface{}
 }
 
-func (self *BitDB) Query(ql string, args ...interface{}) *query {
+func (self *QB) Query(ql string, args ...interface{}) *query {
 	return &query{db:self.db, ql:ql, args:args}
 }
 
