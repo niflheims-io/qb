@@ -11,6 +11,10 @@ func New(db *sql.DB, driver string) *QB {
 	return &QB{db:db, driver:driver}
 }
 
+func (self *QB) DB() *sql.DB  {
+	return self.db
+}
+
 func (self *QB) BeginTx() (*Tx, error) {
 	sqlTx, txBeginErr := self.db.Begin()
 	if txBeginErr != nil {
