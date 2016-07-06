@@ -10,14 +10,19 @@ import (
 	"fmt"
 )
 
+type qor interface  {
+	Prepare(string) (*sql.Stmt, error)
+}
+
 type query struct  {
-	db *sql.DB
+	q qor
 	ql string
 	args []interface{}
 }
 
+
 func (self *QB) Query(ql string, args ...interface{}) *query {
-	return &query{db:self.db, ql:ql, args:args}
+	return &query{ql:ql, args:args, q:self.db}
 }
 
 func (self *query) List(targetSlice interface{}) error {
@@ -51,8 +56,7 @@ func (self *query) List(targetSlice interface{}) error {
 		}
 		fieldMap[colTag] = f
 	}
-	db := self.db
-	stmt, stmtErr := db.Prepare(self.ql)
+	stmt, stmtErr := self.q.Prepare(self.ql)
 	if stmtErr != nil {
 		return stmtErr
 	}
@@ -216,7 +220,7 @@ func (self *query) loadInterface(elementValue reflect.Value) error {
 		}
 		fieldMap[colTag] = f
 	}
-	db := self.db
+	db := self.q
 	stmt, stmtErr := db.Prepare(self.ql)
 	if stmtErr != nil {
 		return stmtErr
@@ -353,7 +357,7 @@ func (self *query) loadBasicVariable(elementValue reflect.Value) error {
 	} else {
 		return errors.New(fmt.Sprint("unknow type", kind))
 	}
-	db := self.db
+	db := self.q
 	stmt, stmtErr := db.Prepare(self.ql)
 	if stmtErr != nil {
 		return stmtErr
