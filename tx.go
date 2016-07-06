@@ -25,6 +25,6 @@ func (self *Tx) Rollback() error {
 	return self.tx.Rollback()
 }
 
-func (self *Tx) Query(ql string, args ...interface{}) *txQuery  {
-	return &txQuery{tx:self.tx, ql:ql, args:args}
+func (self *Tx) Query(ql string, args ...interface{}) *query  {
+	return &query{q:self.tx, ql:ql, args:args}
 }
