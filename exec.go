@@ -31,3 +31,15 @@ func (self *Tx) exec(ql string, lines [][]field) (int64, error) {
 	}
 	return totalRsAffected, nil
 }
+
+func (self *Tx) Exec(query string, args... interface{}) (int64, error) {
+	rs, execErr := self.tx.Exec(query, args...)
+	if execErr != nil {
+		return int64(0), execErr
+	}
+	rsAffected, rsErr := rs.RowsAffected()
+	if rsErr != nil {
+		return int64(0), rsErr
+	}
+	return rsAffected, nil
+}
