@@ -124,11 +124,13 @@ func (self *query) List(targetSlice interface{}) error {
 						str := (val).(string)
 						t.value = []byte(str)
 					}
-					bytes := reflect.Indirect(reflect.ValueOf(val)).Bytes()
 					jsonVal := reflect.New(t.elemType).Interface()
-					unMarshalErr := json.Unmarshal(bytes, &jsonVal)
-					if unMarshalErr != nil {
-						return unMarshalErr
+					bytes := reflect.Indirect(reflect.ValueOf(val)).Bytes()
+					if len(bytes) > 0 {
+						unMarshalErr := json.Unmarshal(bytes, &jsonVal)
+						if unMarshalErr != nil {
+							return unMarshalErr
+						}
 					}
 					t.value = jsonVal
 				} else {
@@ -288,11 +290,13 @@ func (self *query) loadInterface(elementValue reflect.Value) error {
 						str := (val).(string)
 						t.value = []byte(str)
 					}
-					bytes := reflect.Indirect(reflect.ValueOf(val)).Bytes()
 					jsonVal := reflect.New(t.elemType).Interface()
-					unMarshalErr := json.Unmarshal(bytes, &jsonVal)
-					if unMarshalErr != nil {
-						return unMarshalErr
+					bytes := reflect.Indirect(reflect.ValueOf(val)).Bytes()
+					if len(bytes) > 0 {
+						unMarshalErr := json.Unmarshal(bytes, &jsonVal)
+						if unMarshalErr != nil {
+							return unMarshalErr
+						}
 					}
 					t.value = jsonVal
 				} else {
